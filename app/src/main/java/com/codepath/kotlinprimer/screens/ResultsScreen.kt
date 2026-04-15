@@ -40,6 +40,13 @@ import com.codepath.kotlinprimer.ui.theme.CodePathNavy
 import com.codepath.kotlinprimer.ui.theme.CodePathTeal
 import com.codepath.kotlinprimer.ui.theme.CorrectGreen
 import com.codepath.kotlinprimer.ui.theme.WrongRed
+import nl.dionsegijn.konfetti.compose.KonfettiView
+import nl.dionsegijn.konfetti.core.Angle
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.Position
+import nl.dionsegijn.konfetti.core.Spread
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun ResultsScreen(
@@ -52,6 +59,7 @@ fun ResultsScreen(
     val missedTopics = topics.filter { (answers[it.number - 1] == false) || (answers[it.number - 1] == null) }
     val isPassed = correctAnswers >= PASS_THRESHOLD
 
+    Box(modifier = Modifier.fillMaxSize()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -233,6 +241,25 @@ fun ResultsScreen(
             )
         }
     }
+
+    if (isPassed) {
+        KonfettiView(
+            modifier = Modifier.fillMaxSize(),
+            parties = listOf(
+                Party(
+                    angle = Angle.BOTTOM,
+                    spread = Spread.ROUND,
+                    speed = 2f,
+                    maxSpeed = 8f,
+                    damping = 0.95f,
+                    colors = listOf(0x42E5B0, 0x1A3A5C, 0xFFFFFF, 0x4FC3F7),
+                    emitter = Emitter(duration = 3, TimeUnit.SECONDS).perSecond(60),
+                    position = Position.Relative(0.0, 0.0).between(Position.Relative(1.0, 0.0))
+                )
+            )
+        )
+    }
+    } // end Box
 }
 
 @Composable

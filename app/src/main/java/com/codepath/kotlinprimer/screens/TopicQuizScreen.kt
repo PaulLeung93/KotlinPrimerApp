@@ -46,9 +46,15 @@ fun TopicQuizScreen(
     topic: QuizTopic,
     onBackClick: () -> Unit
 ) {
+    val questions = topic.topicQuestions.ifEmpty { listOf(topic.question) }
+    var currentIndex by remember { mutableStateOf(0) }
     var selectedAnswer by remember { mutableStateOf<String?>(null) }
+    var correctCount by remember { mutableStateOf(0) }
+
+    val currentQuestion = questions[currentIndex]
     val isAnswered = selectedAnswer != null
-    val isCorrect = selectedAnswer == topic.question.correctLabel
+    val isCorrect = selectedAnswer == currentQuestion.correctLabel
+    val isLastQuestion = currentIndex == questions.lastIndex
 
     Column(
         modifier = Modifier
@@ -76,6 +82,14 @@ fun TopicQuizScreen(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 2.sp
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "${currentIndex + 1} / ${questions.size}",
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(end = 16.dp)
             )
         }
 
@@ -105,7 +119,7 @@ fun TopicQuizScreen(
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = topic.question.type.name.replace("_", " "),
+                    text = currentQuestion.type.name.replace("_", " "),
                     color = CodePathTeal,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
@@ -116,21 +130,21 @@ fun TopicQuizScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = topic.question.prompt,
+                text = currentQuestion.prompt,
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold,
                 lineHeight = 32.sp
             )
 
-            if (topic.question.codeSnippet != null) {
+            if (currentQuestion.codeSnippet != null) {
                 Spacer(modifier = Modifier.height(16.dp))
-                CodeBlock(code = topic.question.codeSnippet)
+                CodeBlock(code = currentQuestion.codeSnippet)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            topic.question.options.forEach { option ->
+            currentQuestion.options.forEach { option ->
                 AnswerOptionCard(
                     option = option,
                     isSelected = selectedAnswer == option.label,
@@ -150,7 +164,7 @@ fun TopicQuizScreen(
                 Column {
                     FeedbackPanel(
                         isCorrect = isCorrect,
-                        explanation = topic.question.explanation
+                        explanation = currentQuestion.explanation
                     )
                     Spacer(modifier = Modifier.height(24.dp))
 
@@ -176,20 +190,42 @@ fun TopicQuizScreen(
                         Spacer(modifier = Modifier.height(12.dp))
                     }
 
-                    Button(
-                        onClick = onBackClick,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = CodePathTeal),
-                        shape = RoundedCornerShape(24.dp)
-                    ) {
-                        Text(
-                            text = if (isCorrect) "Back to Lesson  ✓" else "Back to Lesson",
-                            color = CodePathNavy,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
-                        )
+                    if (isCorrect && !isLastQuestion) {
+                        Button(
+                            onClick = {
+                                correctCount++
+                                currentIndex++
+                                selectedAnswer = null
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = CodePathTeal),
+                            shape = RoundedCornerShape(24.dp)
+                        ) {
+                            Text(
+                                text = "Next Question →",
+                                color = CodePathNavy,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                        }
+                    } else {
+                        Button(
+                            onClick = onBackClick,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = CodePathTeal),
+                            shape = RoundedCornerShape(24.dp)
+                        ) {
+                            Text(
+                                text = if (isCorrect) "Back to Lesson  ✓" else "Back to Lesson",
+                                color = CodePathNavy,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                        }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                 }

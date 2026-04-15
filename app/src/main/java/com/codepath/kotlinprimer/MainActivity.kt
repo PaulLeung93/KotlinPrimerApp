@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.filled.Terminal
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -30,6 +31,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.codepath.kotlinprimer.data.quizTopics
+import com.codepath.kotlinprimer.screens.CodePlaygroundScreen
 import com.codepath.kotlinprimer.screens.DeepLessonScreen
 import com.codepath.kotlinprimer.screens.LearnHubScreen
 import com.codepath.kotlinprimer.screens.TopicQuizScreen
@@ -61,9 +63,10 @@ sealed class Screen(val route: String) {
         fun createRoute(index: Int) = "question/$index"
     }
     object Results : Screen("results")
+    object Code : Screen("code")
 }
 
-private val bottomNavRoutes = setOf(Screen.Home.route, Screen.Learn.route, Screen.Reference.route)
+private val bottomNavRoutes = setOf(Screen.Home.route, Screen.Learn.route, Screen.Reference.route, Screen.Code.route)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -213,6 +216,10 @@ fun KotlinPrimerApp() {
                     }
                 )
             }
+
+            composable(Screen.Code.route) {
+                CodePlaygroundScreen()
+            }
         }
     }
 }
@@ -254,6 +261,19 @@ private fun KotlinBottomNav(currentRoute: String?, onNavigate: (String) -> Unit)
             onClick = { onNavigate(Screen.Reference.route) },
             icon = { Icon(Icons.Filled.Code, contentDescription = "Reference") },
             label = { Text("Reference") },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = CodePathNavy,
+                selectedTextColor = CodePathTeal,
+                indicatorColor = CodePathTeal,
+                unselectedIconColor = TextMuted,
+                unselectedTextColor = TextMuted
+            )
+        )
+        NavigationBarItem(
+            selected = currentRoute == Screen.Code.route,
+            onClick = { onNavigate(Screen.Code.route) },
+            icon = { Icon(Icons.Filled.Terminal, contentDescription = "Code") },
+            label = { Text("Code") },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = CodePathNavy,
                 selectedTextColor = CodePathTeal,

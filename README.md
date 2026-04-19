@@ -20,14 +20,14 @@ A self-guided Android Kotlin language primer covering 12 fundamental syntax topi
 ### Home — Welcome Screen
 The entry point of the app. Displays a summary of the primer (12 topics, 12 questions, pass rate, and estimated time), along with a description of the curriculum. Tap **Start Primer** to begin the guided lesson flow.
 
-![Welcome Screen](screenshots/welcome_screen.png)
+<img src="screenshots/welcome_screen.png" width="300" alt="Welcome Screen">
 
 ---
 
 ### Learn — Kotlin Fundamentals Hub
 A scrollable list of all 12 topics. Tap any topic card to open a deep-dive lesson for that topic, complete with key concepts, code examples, and an optional topic quiz — so you can study at your own pace outside the main flow.
 
-![Learn Screen](screenshots/learn_screen.png)
+<img src="screenshots/learn_screen.png" width="300" alt="Learn Screen">
 
 **Topics covered:**
 1. `val` vs `var`
@@ -50,14 +50,14 @@ A quick-reference guide with concise, copy-ready code snippets for the most comm
 
 Sections include: Variables, Functions, String Templates, Control Flow, Null Safety, Collections, Loops, and Classes & Data Classes.
 
-![Reference Screen](screenshots/reference_screen.png)
+<img src="screenshots/reference_screen.png" width="300" alt="Reference Screen">
 
 ---
 
 ### Code — Kotlin Playground
 An embedded browser window that loads [play.kotlinlang.org](https://play.kotlinlang.org) — the official Kotlin playground. Use it to experiment with code snippets directly from the app without leaving Android Studio.
 
-![Code Playground Screen](screenshots/code_playground_screen.png)
+<img src="screenshots/code_playground_screen.png" width="300" alt="Code Playground Screen">
 
 ---
 
